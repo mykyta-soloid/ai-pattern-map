@@ -1,15 +1,22 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Карта ШІ-патернів</title>
-<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Вставте текст і побачте, які місця схожі на ШІ-стиль. Наведіть курсор на підсвічений фрагмент, щоб дізнатися, що з ним не так.">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Literata:opsz,wght@7..72,400;7..72,600&display=swap">
 <style>
-/* Layout: reading column on the left, sticky findings panel on the right; panel stacks under the text on phones. */
+/* Layout: input card on top, then the reading column with a sticky findings panel; the panel stacks under the text on phones. */
 :root {
+  color-scheme: light;
   --bg: #f4f5f8;
   --surface: #ffffff;
   --fg: #1a1d24;
   --muted: #596070;
   --line: #d9dce5;
   --accent: #3946c8;
+  --accent-fg: #ffffff;
   --strong: #c2352b;
   --medium: #b36d00;
   --weak: #5b6b94;
@@ -19,72 +26,83 @@
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #121419;
-    --surface: #1b1e26;
-    --fg: #e8eaef;
-    --muted: #9aa2b1;
-    --line: #2b303b;
-    --accent: #909dff;
-    --strong: #ff7d72;
-    --medium: #f0b04a;
-    --weak: #9aabd2;
-    --human: #4cc5a3;
+    --bg: #121419; --surface: #1b1e26; --fg: #e8eaef; --muted: #9aa2b1; --line: #2b303b;
+    --accent: #909dff; --accent-fg: #11131c;
+    --strong: #ff7d72; --medium: #f0b04a; --weak: #9aabd2; --human: #4cc5a3;
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --bg: #121419;
-  --surface: #1b1e26;
-  --fg: #e8eaef;
-  --muted: #9aa2b1;
-  --line: #2b303b;
-  --accent: #909dff;
-  --strong: #ff7d72;
-  --medium: #f0b04a;
-  --weak: #9aabd2;
-  --human: #4cc5a3;
+  --bg: #121419; --surface: #1b1e26; --fg: #e8eaef; --muted: #9aa2b1; --line: #2b303b;
+  --accent: #909dff; --accent-fg: #11131c;
+  --strong: #ff7d72; --medium: #f0b04a; --weak: #9aabd2; --human: #4cc5a3;
   color-scheme: dark;
 }
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
 body {
+  margin: 0;
   background: var(--bg);
   color: var(--fg);
   font-family: var(--font-ui);
   font-size: 15px;
   line-height: 1.5;
-  padding-block: 28px 48px;
+  padding-block: 28px 56px;
   padding-left: max(16px, env(safe-area-inset-left, 0px));
   padding-right: max(16px, env(safe-area-inset-right, 0px));
 }
-.wrap { max-width: 1120px; margin: 0 auto; }
-header { margin-bottom: 20px; }
-h1 { font-size: 24px; line-height: 1.2; margin: 0 0 6px; font-weight: 600; letter-spacing: -0.01em; text-wrap: balance; }
-.sub { margin: 0; color: var(--muted); max-width: 62ch; }
+.wrap { max-width: 1120px; margin: 0 auto; display: flex; flex-direction: column; gap: 22px; }
+h1 { font-size: 26px; line-height: 1.2; margin: 0 0 6px; font-weight: 600; letter-spacing: -0.01em; text-wrap: balance; }
+.sub { margin: 0; color: var(--muted); max-width: 66ch; }
+
+.box { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
+.box h2 { margin: 0 0 10px; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+
+/* input */
+.input { padding: 16px 18px 18px; display: flex; flex-direction: column; gap: 14px; }
+.opts { display: flex; flex-wrap: wrap; gap: 14px 22px; align-items: flex-end; }
+.field { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.field > label, .field > .lbl { font-size: 12px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
+select, input[type="password"], input[type="text"] {
+  font: inherit; color: var(--fg); background: var(--bg);
+  border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; min-width: 0;
+}
+select:focus-visible, input:focus-visible, textarea:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.seg button { font: inherit; font-size: 14px; color: var(--fg); background: var(--bg); border: 0; padding: 8px 14px; cursor: pointer; }
+.seg button + button { border-left: 1px solid var(--line); }
+.seg button[aria-pressed="true"] { background: var(--accent); color: var(--accent-fg); font-weight: 600; }
+textarea {
+  width: 100%; min-height: 220px; resize: vertical;
+  font-family: var(--font-text); font-size: 17px; line-height: 1.7; color: var(--fg);
+  background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px;
+}
+.deep { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1.2fr); gap: 12px 16px; padding: 14px; border: 1px dashed var(--line); border-radius: 8px; }
+.deep .full { grid-column: 1 / -1; }
+.deep input[type="password"], .deep input[type="text"] { width: 100%; }
+.check { display: flex; align-items: center; gap: 8px; font-size: 13.5px; color: var(--muted); }
+.hint { margin: 0; font-size: 13px; color: var(--muted); }
+.actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.btn { font: inherit; font-size: 14.5px; font-weight: 500; color: var(--fg); background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 9px 16px; cursor: pointer; }
+.btn:hover { border-color: var(--accent); }
+.btn.primary { background: var(--accent); color: var(--accent-fg); border-color: var(--accent); font-weight: 600; padding: 10px 22px; }
+.btn[disabled] { opacity: .6; cursor: progress; }
+.status { font-size: 13.5px; color: var(--muted); }
+.status.err { color: var(--strong); font-weight: 500; }
+
+/* results */
 .layout { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 28px; align-items: start; }
-.paper {
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  padding: 32px clamp(18px, 4vw, 44px);
-}
-.paper p {
-  font-family: var(--font-text);
-  font-size: 19px;
-  line-height: 1.85;
-  margin: 0 0 1.2em;
-  hyphens: auto;
-}
+.paper { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 32px clamp(18px, 4vw, 44px); }
+.paper p { font-family: var(--font-text); font-size: 19px; line-height: 1.85; margin: 0 0 1.2em; hyphens: auto; overflow-wrap: anywhere; }
 .paper p:last-child { margin-bottom: 0; }
+.paper p.meta { font-family: var(--font-ui); font-size: 13px; line-height: 1.5; color: var(--muted); margin: 0 0 18px; }
 mark {
   --c: var(--weak);
   color: inherit;
   background: color-mix(in srgb, var(--c) 12%, transparent);
   border-bottom: 2px dotted var(--c);
-  border-radius: 2px;
-  padding: 1px 1px 0;
-  cursor: help;
-  box-decoration-break: clone;
-  -webkit-box-decoration-break: clone;
+  border-radius: 2px; padding: 1px 1px 0; cursor: help;
+  box-decoration-break: clone; -webkit-box-decoration-break: clone;
   transition: background-color .15s;
 }
 mark[data-sev="strong"] { --c: var(--strong); background: color-mix(in srgb, var(--c) 22%, transparent); border-bottom: 3px solid var(--c); }
@@ -96,18 +114,11 @@ mark:focus-visible { box-shadow: 0 0 0 2px var(--accent); }
 mark.off { background: none; border-bottom-color: transparent; cursor: text; pointer-events: none; }
 
 aside { position: sticky; top: 16px; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
-.box { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
-.box h2 { margin: 0 0 10px; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
 .chips { display: flex; flex-wrap: wrap; gap: 8px; }
-.chip {
-  display: inline-flex; align-items: center; gap: 8px;
-  font: inherit; font-size: 13px; color: var(--fg);
-  background: var(--surface); border: 1px solid var(--line); border-radius: 999px;
-  padding: 6px 12px; cursor: pointer;
-}
+.chip { display: inline-flex; align-items: center; gap: 8px; font: inherit; font-size: 13px; color: var(--fg); background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 6px 12px; cursor: pointer; }
 .chip[aria-pressed="false"] { opacity: .5; }
 .chip:hover { border-color: var(--accent); }
-.chip:focus-visible, .item:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.item:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--c); flex: none; }
 .dot[data-sev="strong"] { --c: var(--strong); }
 .dot[data-sev="medium"] { --c: var(--medium); }
@@ -116,29 +127,18 @@ aside { position: sticky; top: 16px; display: flex; flex-direction: column; gap:
 .chip b { font-variant-numeric: tabular-nums; font-weight: 600; }
 .note { margin: 0; font-size: 13.5px; color: var(--muted); }
 .note + .note { margin-top: 8px; }
-.note strong { color: var(--fg); font-weight: 600; }
+.note.strong { color: var(--fg); }
+.note.strong::before { content: ""; display: inline-block; width: 8px; height: 8px; margin-right: 8px; border-radius: 50%; background: var(--strong); }
 .list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; max-height: 46vh; overflow-y: auto; }
-.item {
-  display: grid; grid-template-columns: 10px minmax(0, 1fr); gap: 10px; align-items: start;
-  width: 100%; text-align: left; font: inherit; color: inherit; background: none; border: 0;
-  border-top: 1px solid var(--line); padding: 9px 4px; cursor: pointer; border-radius: 4px;
-}
+.item { display: grid; grid-template-columns: 10px minmax(0, 1fr); gap: 10px; align-items: start; width: 100%; text-align: left; font: inherit; color: inherit; background: none; border: 0; border-top: 1px solid var(--line); padding: 9px 4px; cursor: pointer; border-radius: 4px; }
 .list li:first-child .item { border-top: 0; }
 .item:hover, .item.hot { background: color-mix(in srgb, var(--accent) 8%, transparent); }
 .item .dot { margin-top: 6px; }
 .item .cat { display: block; font-size: 13px; font-weight: 600; }
 .item .q { display: block; font-size: 12.5px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.item[hidden] { display: none; }
+.empty { margin: 0; font-size: 13.5px; color: var(--muted); }
 
-.tip {
-  position: fixed; z-index: 50; left: 0; top: 0; width: min(360px, calc(100vw - 16px));
-  background: var(--surface); color: var(--fg);
-  border: 1px solid var(--line); border-left: 4px solid var(--c, var(--accent));
-  border-radius: 8px; padding: 12px 14px 13px;
-  box-shadow: 0 8px 28px rgba(0,0,0,.18);
-  font-family: var(--font-ui); font-size: 13.5px; line-height: 1.5;
-  opacity: 0; visibility: hidden; transition: opacity .12s; pointer-events: none;
-}
+.tip { position: fixed; z-index: 50; left: 0; top: 0; width: min(360px, calc(100vw - 16px)); background: var(--surface); color: var(--fg); border: 1px solid var(--line); border-left: 4px solid var(--c, var(--accent)); border-radius: 8px; padding: 12px 14px 13px; box-shadow: 0 8px 28px rgba(0,0,0,.18); font-family: var(--font-ui); font-size: 13.5px; line-height: 1.5; opacity: 0; visibility: hidden; transition: opacity .12s; pointer-events: none; }
 .tip.show { opacity: 1; visibility: visible; }
 .tip.pinned { pointer-events: auto; }
 .tip .head { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
@@ -148,41 +148,84 @@ aside { position: sticky; top: 16px; display: flex; flex-direction: column; gap:
 .tip dt { font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
 .tip dd { margin: 1px 0 0; }
 .tip .genre { color: var(--muted); }
+
 @media (max-width: 860px) {
   .layout { grid-template-columns: minmax(0, 1fr); }
   aside { position: static; }
   .list { max-height: none; }
+  .deep { grid-template-columns: minmax(0, 1fr); }
   .tip { left: max(8px, env(safe-area-inset-left, 0px)) !important; top: auto !important; bottom: max(8px, env(safe-area-inset-bottom, 0px)); width: auto; right: max(8px, env(safe-area-inset-right, 0px)); pointer-events: auto; }
   .paper p { font-size: 17.5px; }
+  textarea { font-size: 16px; }
 }
 @media (prefers-reduced-motion: reduce) { mark, .tip { transition: none; } }
 </style>
-
+</head>
+<body>
 <div class="wrap">
   <header>
     <h1>Карта ШІ-патернів</h1>
-    <p class="sub">Філософський текст про мову, перевірений скілом no-ai-slop. Наведіть курсор на підсвічене місце, щоб побачити, що з ним не так. На телефоні торкніться фрагмента.</p>
+    <p class="sub">Вставте текст, і сторінка підсвітить місця, схожі на ШІ-стиль. Наведіть курсор на фрагмент (на телефоні торкніться), щоб побачити, що з ним не так і як виправити.</p>
   </header>
 
-  <div class="layout">
-    <article class="paper" id="paper">
-      <p><mark data-id="f1">Мова як предмет вивчення постає перед тими, хто її опановує, у вкрай різному світлі залежно від обставин та інституційних форм навчання</mark>. У шкільних курсах української мови <mark data-id="f2">традиційно (хоча й із помітним поступом внаслідок освітніх реформ)</mark> переважає мовознавчий підхід. Учні старшої школи <mark data-id="f3">визначають частини мови, аналізують синтаксичні конструкції, розрізняють типи речень і встановлюють зв'язки між їхніми складниками</mark>. Такий підхід формує уявлення про мову як <mark data-id="f4">певну</mark> впорядковану та стабільну систему, елементи якої <mark data-id="f5">підпорядковуються визначеним правилам правопису та підручника</mark>. Натомість діти дошкільного віку засвоюють батьківську мову <mark data-id="f6">переважно природним шляхом, через безпосередню взаємодію з мовним середовищем</mark>. <mark data-id="h1">В перші роки</mark> це наслідування звуків та інтонацій дорослих, лепет і поступове формування перших слів. Згодом дитина відкриває для себе <mark data-id="f7">не лише здатність мови називати предмети та явища, а й можливість</mark> <mark data-id="f8">“змінювати реальність”</mark> за допомогою слів. <mark data-id="h2">Певні вислови, наприклад, можуть спонукати батьків усміхнутися або навіть принести бажане печиво.</mark></p>
+  <section class="box input" aria-label="Текст для аналізу">
+    <div class="opts">
+      <div class="field">
+        <label for="genre">Жанр</label>
+        <select id="genre">
+          <option value="science">Науковий текст</option>
+          <option value="journalism">Журналістика й блог</option>
+          <option value="marketing">Маркетинг і реклама</option>
+          <option value="general">Загальний текст</option>
+        </select>
+      </div>
+      <div class="field">
+        <span class="lbl" id="modeLbl">Режим</span>
+        <div class="seg" role="group" aria-labelledby="modeLbl">
+          <button type="button" id="modeFast" aria-pressed="true">Швидкий</button>
+          <button type="button" id="modeDeep" aria-pressed="false">Глибокий (Claude)</button>
+        </div>
+      </div>
+    </div>
 
-      <p><mark data-id="f9">Вступне ілюстративне порівняння демонструє, що</mark> <mark data-id="f10">уже на рівні первинного засвоєння мови</mark> можна простежити два її виміри: структурний, пов'язаний із засвоєнням системи знаків і правил, та практичний, <mark data-id="f11">що виявляється у використанні</mark> мовлення як засобу взаємодії з навколишнім світом та його <mark data-id="h3">субʼєктами</mark>. <mark data-id="f12">Подібне розрізнення властиве й історії аналітичної філософії ХХ століття</mark>, де <mark data-id="f13">воно випливає в проблему вибору</mark> між двома методологічними орієнтаціями: аналізом ідеальної мови та дослідженням повсякденного мовлення.</p>
-    </article>
+    <div class="deep" id="deep" hidden>
+      <div class="field">
+        <label for="key">Ключ Anthropic API</label>
+        <input type="password" id="key" autocomplete="off" spellcheck="false" placeholder="sk-ant-...">
+      </div>
+      <div class="field">
+        <label for="model">Модель</label>
+        <input type="text" id="model" value="claude-sonnet-5-5" spellcheck="false">
+      </div>
+      <label class="check full"><input type="checkbox" id="remember"> Запам'ятати ключ у цьому браузері</label>
+      <p class="hint full">Глибокий режим розуміє зміст: бачить твердження без джерел, загальні зачини, штучну логіку. Текст і ключ надсилаються з вашого браузера напряму в Anthropic API, нашого сервера немає. Запити оплачуються з вашого ключа.</p>
+    </div>
 
+    <div class="field">
+      <label for="src">Текст</label>
+      <textarea id="src" spellcheck="false" placeholder="Вставте текст сюди"></textarea>
+    </div>
+
+    <div class="actions">
+      <button type="button" class="btn primary" id="run">Проаналізувати</button>
+      <button type="button" class="btn" id="sample">Приклад</button>
+      <button type="button" class="btn" id="clear">Очистити</button>
+      <span class="status" id="status" role="status" aria-live="polite"></span>
+    </div>
+    <p class="hint">Швидкий режим працює в браузері за правилами й нікуди не надсилає текст. Підказка: Ctrl/⌘ + Enter запускає аналіз.</p>
+  </section>
+
+  <div class="layout" id="out" hidden>
+    <article class="paper" id="paper" aria-label="Результат"></article>
     <aside>
       <section class="box" aria-label="Фільтри">
         <h2>Показати</h2>
         <div class="chips" id="chips"></div>
       </section>
-
-      <section class="box" aria-label="Загальне спостереження">
-        <h2>Загальне спостереження</h2>
-        <p class="note"><strong>У двох абзацах немає жодного імені чи посилання.</strong> Для наукового філософського тексту це головний сигнал, тому «Без джерела» тут рахується найсерйозніше.</p>
-        <p class="note">Іменникову мову й термінологію вважаємо нормою жанру: такі місця позначені слабко. Патерни є ознаками, а не доказом, що текст писав ШІ.</p>
+      <section class="box" aria-label="Спостереження">
+        <h2>Спостереження</h2>
+        <div id="notes"></div>
       </section>
-
       <section class="box" aria-label="Усі знахідки">
         <h2>Усі знахідки</h2>
         <ul class="list" id="list"></ul>
@@ -191,234 +234,303 @@ aside { position: sticky; top: 16px; display: flex; flex-direction: column; gap:
   </div>
 </div>
 
-<div class="tip" id="tip" role="tooltip" aria-live="polite"></div>
+<div class="tip" id="tip" role="tooltip"></div>
 
+<script src="engine.js"></script>
+<script src="sample.js"></script>
 <script>
-var SEV = {
-  strong: "Сильний",
-  medium: "Середній",
-  weak: "Слабкий",
-  human: "Живий сигнал"
-};
-var SEV_PLURAL = {
-  strong: "Сильні",
-  medium: "Середні",
-  weak: "Слабкі",
-  human: "Живі сигнали"
-};
+(function () {
+  var E = window.PatternEngine;
+  var SEV = { strong: "Сильний", medium: "Середній", weak: "Слабкий", human: "Живий сигнал" };
+  var SEV_PLURAL = { strong: "Сильні", medium: "Середні", weak: "Слабкі", human: "Живі сигнали" };
+  var ORDER = ["strong", "medium", "weak", "human"];
 
-var F = {
-  f1: { cat: "Загальник", sev: "medium",
-    what: "Зачин про те, що мова «постає в різному світлі», підійшов би до будь-якої роботи про мову. Тест на переносимість не проходить. «Вкрай» і «інституційних форм» додають ваги, а не змісту.",
-    fix: "Почати з тези цієї роботи або з конкретного розрізнення, яке далі розгортається.",
-    genre: "Філософські вступи часто починають широко, але теза має з'явитися в перших реченнях." },
-  f2: { cat: "Без джерела", sev: "strong",
-    what: "Твердження про стан шкільного курсу й «помітний поступ» не мають ні програми, ні дослідження, ні автора. Дужка звучить як застереження, а не як факт.",
-    fix: "Назвати реформу, документ чи дослідження або прибрати застереження.",
-    genre: "У науковому тексті таке твердження потребує посилання." },
-  f3: { cat: "Однотипний ритм", sev: "weak",
-    what: "Чотири дієслова поспіль в одній формі. Сам перелік конкретний, і це добре, але ритм механічний.",
-    fix: "Залишити один-два найважливіші приклади або розбити перелік.",
-    genre: "Перелік змісту курсу доречний. Проблема лише в одноманітності." },
-  f4: { cat: "Розмите слово", sev: "weak",
-    what: "«Певну» нічого не уточнює: яку саме систему мають на увазі?",
-    fix: "Прибрати слово або назвати, яка це система.",
-    genre: "У філософії «певний» часто є обережним словом, але тут воно зайве." },
-  f5: { cat: "Розмите слово", sev: "weak",
-    what: "«Визначеним» порожнє, а «правилам підручника» розмите: які правила і чиї?",
-    fix: "Назвати джерело норм (правопис, програма) або скоротити до «правилам правопису».",
-    genre: "Нормативний характер школи можна підкріпити конкретним документом." },
-  f6: { cat: "Без джерела", sev: "medium",
-    what: "Загальне твердження про засвоєння мови без автора й теорії. Складається з абстрактних іменників: «взаємодія», «середовище».",
-    fix: "Послатися на концепцію засвоєння мови або сформулювати конкретніше.",
-    genre: "Тут потрібне посилання: у лінгвістиці та психології є різні моделі." },
-  f7: { cat: "Протиставлення «не лише…, а й»", sev: "medium",
-    what: "Конструкція розкладає думку на дві частини, хоча головне тут друга: мова змінює реальність. Перша частина далі не розгортається.",
-    fix: "Сказати головне одразу, а називання предметів згадати окремо або прибрати.",
-    genre: "У філософії така побудова поширена, але тут вона зайва." },
-  f8: { cat: "Без джерела", sev: "weak",
-    what: "Фраза в лапках нагадує тезу про те, що слова діють, але автора не названо.",
-    fix: "Якщо це відсилка до теорії мовленнєвих актів (Остін), назвати джерело. Якщо ні, прибрати лапки.",
-    genre: "Для філософського тексту відсилка без імені вразлива." },
-  f9: { cat: "Метакоментар", sev: "medium",
-    what: "Текст коментує сам себе замість того, щоб сказати висновок. «Вступне ілюстративне порівняння» називає дію автора, а не думку.",
-    fix: "Прибрати й одразу назвати два виміри.",
-    genre: "Підсумок наприкінці вступу в науковому тексті нормальний. Метакоментар можна скоротити." },
-  f10: { cat: "Розмите слово", sev: "weak",
-    what: "«На рівні» тут порожня конструкція: «у первинному засвоєнні» каже те саме.",
-    fix: "«У первинному засвоєнні мови».",
-    genre: "У науковому стилі «на рівні» трапляється часто, але тут нічого не додає." },
-  f11: { cat: "Слабке дієслово", sev: "weak",
-    what: "Практичний вимір не «виявляється», а полягає у використанні мовлення. Дієслово звучить вагомо, але нічого не рухає.",
-    fix: "«Що полягає у…» або «тобто у використанні…».",
-    genre: "Звичний науковий зворот. Міняти варто, якщо він повторюється." },
-  f12: { cat: "Без джерела", sev: "strong",
-    what: "Велике історичне твердження без імен, праць і дат. Видно лише, що мова про два напрями, але жоден представник не названий.",
-    fix: "Назвати авторів двох орієнтацій і дати хоча б одне посилання на кожну.",
-    genre: "Для філософського тексту це найслабше місце: без імен твердження неможливо перевірити." },
-  f13: { cat: "Слабке дієслово", sev: "medium",
-    what: "«Випливає в проблему» нестандартна сполука: випливати можна з чогось, а не «в» щось. Образ нечіткий.",
-    fix: "«Перетворюється на проблему вибору» або «постає як вибір».",
-    genre: "Перевірте, чи це не калька, і прочитайте вголос." },
-  h1: { cat: "Дрібна непослідовність", sev: "human",
-    what: "Перед приголосним зазвичай пишуть «У перші роки». Це дрібний збій, більш типовий для людського письма. Доказом не є.",
-    fix: "Виправити на «У перші роки».",
-    genre: "Милозвучність: у/в залежить від сусідніх звуків." },
-  h2: { cat: "Конкретний приклад", sev: "human",
-    what: "Образ із печивом живий і трохи жартівливий. Шаблонні тексти частіше обирають узагальнення. Доказом не є.",
-    fix: "Нічого не робити: це місце з голосом автора.",
-    genre: "У філософському тексті такий приклад допомагає читачу." },
-  h3: { cat: "Різні апострофи", sev: "human",
-    what: "Тут апостроф ʼ, а в «зв'язки» й «пов'язаний» звичайний '. Так буває, коли текст зібрано з різних джерел або набрано вручну. Доказом не є.",
-    fix: "Уніфікувати апострофи.",
-    genre: "Редакторська дрібниця, яка не залежить від жанру." }
-};
+  var $ = function (id) { return document.getElementById(id); };
+  var src = $("src"), genreSel = $("genre"), run = $("run"), statusEl = $("status");
+  var paper = $("paper"), out = $("out"), list = $("list"), chips = $("chips"), notesEl = $("notes"), tip = $("tip");
+  var modeFast = $("modeFast"), modeDeep = $("modeDeep"), deepBox = $("deep");
+  var keyEl = $("key"), modelEl = $("model"), rememberEl = $("remember");
+  var narrow = window.matchMedia("(max-width: 860px)");
 
-var marks = Array.prototype.slice.call(document.querySelectorAll("mark[data-id]"));
-var tip = document.getElementById("tip");
-var list = document.getElementById("list");
-var chips = document.getElementById("chips");
-var pinned = null;
-var narrow = window.matchMedia("(max-width: 860px)");
+  var mode = "fast";
+  var on = { strong: true, medium: true, weak: true, human: true };
+  var res = null, marks = [], pinned = null;
 
-marks.forEach(function (m, i) {
-  var f = F[m.getAttribute("data-id")];
-  m.setAttribute("data-sev", f.sev);
-  m.setAttribute("tabindex", "0");
-  m.setAttribute("aria-label", f.cat + ": " + f.what);
-});
+  function store(k, v) { try { if (v == null) localStorage.removeItem(k); else localStorage.setItem(k, v); } catch (e) {} }
+  function load(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
 
-function el(tag, cls, text) {
-  var n = document.createElement(tag);
-  if (cls) n.className = cls;
-  if (text) n.textContent = text;
-  return n;
-}
-
-function fillTip(id) {
-  var f = F[id];
-  tip.textContent = "";
-  tip.style.setProperty("--c", "var(--" + f.sev + ")");
-  var head = el("div", "head");
-  head.appendChild(el("span", "cat", f.cat));
-  head.appendChild(el("span", "badge", SEV[f.sev]));
-  tip.appendChild(head);
-  var dl = el("dl");
-  [["Що не так", f.what, ""], ["Як виправити", f.fix, ""], ["Для філософського тексту", f.genre, "genre"]].forEach(function (r) {
-    var wrap = el("div");
-    wrap.appendChild(el("dt", "", r[0]));
-    wrap.appendChild(el("dd", r[2], r[1]));
-    dl.appendChild(wrap);
-  });
-  tip.appendChild(dl);
-}
-
-function place(x, y) {
-  if (narrow.matches) return;
-  var w = tip.offsetWidth, h = tip.offsetHeight;
-  var left = Math.min(Math.max(8, x + 14), window.innerWidth - w - 8);
-  var top = y + 20;
-  if (top + h > window.innerHeight - 8) top = Math.max(8, y - h - 14);
-  tip.style.left = left + "px";
-  tip.style.top = top + "px";
-}
-
-function placeAtEl(m) {
-  var r = m.getBoundingClientRect();
-  place(r.left, r.bottom - 14);
-}
-
-function show(id, x, y, m) {
-  fillTip(id);
-  tip.classList.add("show");
-  if (m && x == null) placeAtEl(m); else place(x, y);
-  marks.forEach(function (n) { n.classList.toggle("active", n.getAttribute("data-id") === id); });
-  Array.prototype.forEach.call(list.querySelectorAll(".item"), function (it) {
-    it.classList.toggle("hot", it.getAttribute("data-id") === id);
-  });
-}
-
-function hide() {
-  tip.classList.remove("show", "pinned");
-  marks.forEach(function (n) { n.classList.remove("active"); });
-  Array.prototype.forEach.call(list.querySelectorAll(".item"), function (it) { it.classList.remove("hot"); });
-}
-
-function unpin() { pinned = null; hide(); }
-
-marks.forEach(function (m) {
-  var id = m.getAttribute("data-id");
-  m.addEventListener("mouseenter", function (e) { if (!pinned) show(id, e.clientX, e.clientY, m); });
-  m.addEventListener("mousemove", function (e) { if (!pinned) place(e.clientX, e.clientY); });
-  m.addEventListener("mouseleave", function () { if (!pinned) hide(); });
-  m.addEventListener("focus", function () { if (!pinned) show(id, null, null, m); });
-  m.addEventListener("blur", function () { if (!pinned) hide(); });
-  m.addEventListener("click", function (e) {
-    e.stopPropagation();
-    if (pinned === id) { unpin(); return; }
-    pinned = id;
-    show(id, e.clientX, e.clientY, m);
-    tip.classList.add("pinned");
-  });
-  m.addEventListener("keydown", function (e) {
-    if (e.key === "Enter" || e.key === " ") { e.preventDefault(); m.click(); }
-  });
-});
-
-document.addEventListener("click", function (e) { if (pinned && !tip.contains(e.target)) unpin(); });
-document.addEventListener("keydown", function (e) { if (e.key === "Escape") unpin(); });
-window.addEventListener("scroll", function () {
-  if (pinned) {
-    var m = document.querySelector('mark[data-id="' + pinned + '"]');
-    if (m) placeAtEl(m);
+  function el(tag, cls, text) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text != null) n.textContent = text;
+    return n;
   }
-}, { passive: true });
+  function setStatus(text, err) {
+    statusEl.textContent = text || "";
+    statusEl.className = "status" + (err ? " err" : "");
+  }
 
-/* list of findings, in reading order */
-marks.forEach(function (m) {
-  var id = m.getAttribute("data-id");
-  var f = F[id];
-  var li = el("li");
-  var b = el("button", "item");
-  b.type = "button";
-  b.setAttribute("data-id", id);
-  b.setAttribute("data-sev", f.sev);
-  var d = el("span", "dot"); d.setAttribute("data-sev", f.sev);
-  var box = el("span");
-  box.appendChild(el("span", "cat", f.cat));
-  var t = m.textContent;
-  box.appendChild(el("span", "q", "«" + (t.length > 56 ? t.slice(0, 56) + "…" : t) + "»"));
-  b.appendChild(d); b.appendChild(box);
-  b.addEventListener("click", function (e) {
-    e.stopPropagation();
-    m.scrollIntoView({ block: "center", behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
-    pinned = id;
-    setTimeout(function () { show(id, null, null, m); tip.classList.add("pinned"); }, 320);
-  });
-  b.addEventListener("mouseenter", function () { if (!pinned) m.classList.add("active"); });
-  b.addEventListener("mouseleave", function () { if (!pinned) m.classList.remove("active"); });
-  li.appendChild(b);
-  list.appendChild(li);
-});
+  /* ---------- tooltip ---------- */
+  function fillTip(f) {
+    tip.textContent = "";
+    tip.style.setProperty("--c", "var(--" + f.sev + ")");
+    var head = el("div", "head");
+    head.appendChild(el("span", "cat", f.cat));
+    head.appendChild(el("span", "badge", SEV[f.sev]));
+    tip.appendChild(head);
+    var dl = el("dl");
+    var rows = [["Що не так", f.what, ""], ["Як виправити", f.fix, ""]];
+    if (f.genre) rows.push(["Для жанру «" + res.genreName + "»", f.genre, "genre"]);
+    rows.forEach(function (r) {
+      if (!r[1]) return;
+      var w = el("div");
+      w.appendChild(el("dt", "", r[0]));
+      w.appendChild(el("dd", r[2], r[1]));
+      dl.appendChild(w);
+    });
+    tip.appendChild(dl);
+  }
+  function place(x, y) {
+    if (narrow.matches) return;
+    var w = tip.offsetWidth, h = tip.offsetHeight;
+    var left = Math.min(Math.max(8, x + 14), window.innerWidth - w - 8);
+    var top = y + 20;
+    if (top + h > window.innerHeight - 8) top = Math.max(8, y - h - 14);
+    tip.style.left = left + "px";
+    tip.style.top = top + "px";
+  }
+  function placeAtEl(m) { var r = m.getBoundingClientRect(); place(r.left, r.bottom - 14); }
+  function show(i, x, y) {
+    fillTip(res.findings[i]);
+    tip.classList.add("show");
+    var m = marks[i];
+    if (x == null) placeAtEl(m); else place(x, y);
+    marks.forEach(function (n, k) { n.classList.toggle("active", k === i); });
+    Array.prototype.forEach.call(list.querySelectorAll(".item"), function (it) { it.classList.toggle("hot", +it.getAttribute("data-i") === i); });
+  }
+  function hide() {
+    tip.classList.remove("show", "pinned");
+    marks.forEach(function (n) { n.classList.remove("active"); });
+    Array.prototype.forEach.call(list.querySelectorAll(".item"), function (it) { it.classList.remove("hot"); });
+  }
+  function unpin() { pinned = null; hide(); }
 
-/* severity filters with live counts */
-var on = { strong: true, medium: true, weak: true, human: true };
-["strong", "medium", "weak", "human"].forEach(function (s) {
-  var n = marks.filter(function (m) { return F[m.getAttribute("data-id")].sev === s; }).length;
-  var c = el("button", "chip");
-  c.type = "button";
-  c.setAttribute("aria-pressed", "true");
-  var d = el("span", "dot"); d.setAttribute("data-sev", s);
-  c.appendChild(d);
-  c.appendChild(el("span", "", SEV_PLURAL[s]));
-  c.appendChild(el("b", "", String(n)));
-  c.addEventListener("click", function () {
-    on[s] = !on[s];
-    c.setAttribute("aria-pressed", String(on[s]));
-    unpin();
-    marks.forEach(function (m) { if (F[m.getAttribute("data-id")].sev === s) m.classList.toggle("off", !on[s]); });
-    Array.prototype.forEach.call(list.querySelectorAll(".item"), function (it) { if (it.getAttribute("data-sev") === s) it.hidden = !on[s]; });
-  });
-  chips.appendChild(c);
-});
+  document.addEventListener("click", function (e) { if (pinned !== null && !tip.contains(e.target)) unpin(); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") unpin(); });
+  window.addEventListener("scroll", function () { if (pinned !== null && marks[pinned]) placeAtEl(marks[pinned]); }, { passive: true });
+
+  /* ---------- render ---------- */
+  function render(r) {
+    res = r; pinned = null; hide();
+    paper.textContent = "";
+    marks = [];
+    paper.appendChild(el("p", "meta", "Жанр: " + r.genreName + " · " + r.stats.words + " слів · " + r.stats.findings + " знахідок" + (r.mode === "deep" ? " · глибокий аналіз" : "")));
+
+    r.paragraphs.forEach(function (p) {
+      var pe = el("p");
+      var pos = p.start;
+      r.findings.forEach(function (f, i) {
+        if (f.start < p.start || f.end > p.end) return;
+        if (f.start > pos) pe.appendChild(document.createTextNode(r.text.slice(pos, f.start)));
+        var m = el("mark", "", r.text.slice(f.start, f.end));
+        m.setAttribute("data-sev", f.sev);
+        m.setAttribute("tabindex", "0");
+        m.setAttribute("aria-label", f.cat + ": " + f.what);
+        bindMark(m, i);
+        marks[i] = m;
+        pe.appendChild(m);
+        pos = f.end;
+      });
+      if (pos < p.end) pe.appendChild(document.createTextNode(r.text.slice(pos, p.end)));
+      paper.appendChild(pe);
+    });
+
+    renderChips(); renderNotes(); renderList();
+    out.hidden = false;
+    applyFilters();
+  }
+
+  function bindMark(m, i) {
+    m.addEventListener("mouseenter", function (e) { if (pinned === null) show(i, e.clientX, e.clientY); });
+    m.addEventListener("mousemove", function (e) { if (pinned === null) place(e.clientX, e.clientY); });
+    m.addEventListener("mouseleave", function () { if (pinned === null) hide(); });
+    m.addEventListener("focus", function () { if (pinned === null) show(i, null, null); });
+    m.addEventListener("blur", function () { if (pinned === null) hide(); });
+    m.addEventListener("click", function (e) {
+      e.stopPropagation();
+      if (pinned === i) { unpin(); return; }
+      pinned = i; show(i, e.clientX, e.clientY); tip.classList.add("pinned");
+    });
+    m.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); m.click(); } });
+  }
+
+  function renderChips() {
+    chips.textContent = "";
+    ORDER.forEach(function (s) {
+      var n = res.findings.filter(function (f) { return f.sev === s; }).length;
+      var c = el("button", "chip");
+      c.type = "button";
+      c.setAttribute("aria-pressed", String(on[s]));
+      var d = el("span", "dot"); d.setAttribute("data-sev", s);
+      c.appendChild(d); c.appendChild(el("span", "", SEV_PLURAL[s])); c.appendChild(el("b", "", String(n)));
+      c.addEventListener("click", function () {
+        on[s] = !on[s];
+        c.setAttribute("aria-pressed", String(on[s]));
+        unpin(); applyFilters();
+      });
+      chips.appendChild(c);
+    });
+  }
+
+  function applyFilters() {
+    marks.forEach(function (m, i) { m.classList.toggle("off", !on[res.findings[i].sev]); });
+    Array.prototype.forEach.call(list.querySelectorAll("li[data-sev]"), function (li) { li.hidden = !on[li.getAttribute("data-sev")]; });
+  }
+
+  function renderNotes() {
+    notesEl.textContent = "";
+    res.notes.forEach(function (n) { notesEl.appendChild(el("p", "note" + (n.sev === "strong" ? " strong" : ""), n.text)); });
+  }
+
+  function renderList() {
+    list.textContent = "";
+    if (!res.findings.length) {
+      var li0 = el("li");
+      li0.appendChild(el("p", "empty", "Правила нічого не знайшли. Спробуйте глибокий режим: він бачить і те, що не зводиться до готових формулювань."));
+      list.appendChild(li0);
+      return;
+    }
+    res.findings.forEach(function (f, i) {
+      var li = el("li"); li.setAttribute("data-sev", f.sev);
+      var b = el("button", "item"); b.type = "button"; b.setAttribute("data-i", i);
+      var d = el("span", "dot"); d.setAttribute("data-sev", f.sev);
+      var box = el("span");
+      box.appendChild(el("span", "cat", f.cat));
+      var t = res.text.slice(f.start, f.end);
+      box.appendChild(el("span", "q", "«" + (t.length > 56 ? t.slice(0, 56) + "…" : t) + "»"));
+      b.appendChild(d); b.appendChild(box);
+      b.addEventListener("click", function (e) {
+        e.stopPropagation();
+        marks[i].scrollIntoView({ block: "center", behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+        pinned = i;
+        setTimeout(function () { show(i, null, null); tip.classList.add("pinned"); }, 320);
+      });
+      b.addEventListener("mouseenter", function () { if (pinned === null && marks[i]) marks[i].classList.add("active"); });
+      b.addEventListener("mouseleave", function () { if (pinned === null && marks[i]) marks[i].classList.remove("active"); });
+      li.appendChild(b); list.appendChild(li);
+    });
+  }
+
+  /* ---------- deep mode (Claude API) ---------- */
+  var CATS = ["Загальник", "Без джерела", "Метакоментар", "Протиставлення «не лише…, а й»", "Розмите слово", "Слабке дієслово", "Порожня фраза", "Роздута значущість", "Однотипний ритм", "Риторична заготовка", "ШІ-лексика", "Пафосний кінець", "Підсумок-переказ"];
+
+  function deepAnalyze(text, genre) {
+    var key = keyEl.value.trim();
+    if (!key) return Promise.reject(new Error("Вставте ключ Anthropic API або перемкніться на швидкий режим."));
+    if (text.length > 20000) return Promise.reject(new Error("Текст задовгий для глибокого режиму (до 20 000 символів)."));
+    var gname = E.GENRES[genre].name;
+    var system = "Ти досвідчений редактор, який шукає в тексті патерни, типові для письма мовних моделей. Ти не вирішуєш, чи писав текст ШІ, і не переписуєш текст. Відповідай лише JSON-масивом без пояснень і без markdown.";
+    var prompt = [
+      "Жанр тексту: " + gname + ". Враховуй жанр: у науковому тексті іменникову мову й терміни вважай нормою, а твердження без імен, праць і посилань, безіменні «дослідники», історичні узагальнення без дат вважай сильною проблемою.",
+      "",
+      "Знайди місця, де є ці патерни: загальник, який підійшов би до будь-якої теми (тест на переносимість); твердження без джерела; метакоментар про сам текст; протиставлення «не лише X, а й Y»; розмите слово чи застереження; слабке дієслово замість прямого; порожня фраза-зачин; роздута значущість; однотипний ритм; риторична заготовка; ШІ-лексика; пафосний кінець; підсумок, що переказує прочитане.",
+      "Окремо познач як «human» (живі сигнали) конкретні, нешаблонні місця: яскравий приклад, дрібні помилки, непослідовність. Це не доказ авторства.",
+      "",
+      "Категорії бажано брати з цього списку: " + CATS.join("; ") + ". Для живих сигналів вигадай коротку назву.",
+      "",
+      "Формат відповіді: JSON-масив до 25 об'єктів. Кожен: {\"quote\": точний фрагмент із тексту без змін регістру й розділових знаків, до 160 символів, фрагменти не перетинаються, \"category\": назва, \"severity\": \"strong\"|\"medium\"|\"weak\"|\"human\", \"what\": що не так, до 200 символів, \"fix\": як виправити, до 80 символів, без переписування всього речення, \"genre\": що це означає саме для жанру «" + gname + "», до 160 символів}.",
+      "Мова пояснень: українська. Не вигадуй нічого, чого немає в тексті.",
+      "",
+      "ТЕКСТ:",
+      "<<<",
+      text,
+      ">>>"
+    ].join("\n");
+
+    return fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        "x-api-key": key,
+        "anthropic-version": "2023-06-01",
+        "anthropic-dangerous-direct-browser-access": "true"
+      },
+      body: JSON.stringify({ model: modelEl.value.trim() || "claude-sonnet-5-5", max_tokens: 4000, system: system, messages: [{ role: "user", content: prompt }] })
+    }).then(function (r) {
+      return r.json().then(function (data) {
+        if (!r.ok) throw new Error((data && data.error && data.error.message) || ("Помилка API " + r.status));
+        return data;
+      });
+    }).then(function (data) {
+      var raw = (data.content || []).map(function (c) { return c.text || ""; }).join("");
+      var a = raw.indexOf("["), b = raw.lastIndexOf("]");
+      if (a < 0 || b < a) throw new Error("Модель повернула відповідь не у форматі JSON. Спробуйте ще раз.");
+      var items;
+      try { items = JSON.parse(raw.slice(a, b + 1)); } catch (e) { throw new Error("Не вдалося розібрати відповідь моделі. Спробуйте ще раз."); }
+      var r2 = E.analyze(text, { genre: genre, external: items });
+      r2.mode = "deep";
+      return r2;
+    });
+  }
+
+  /* ---------- actions ---------- */
+  function analyze() {
+    var text = src.value;
+    if (!text.trim()) { setStatus("Вставте текст.", true); src.focus(); return; }
+    var genre = genreSel.value;
+    store("apm.genre", genre);
+    if (mode === "fast") {
+      var r = E.analyze(text, { genre: genre });
+      r.mode = "fast";
+      render(r);
+      setStatus("Готово: " + r.stats.findings + " знахідок.");
+      return;
+    }
+    run.disabled = true;
+    setStatus("Claude читає текст…");
+    if (rememberEl.checked) store("apm.key", keyEl.value.trim()); else store("apm.key", null);
+    store("apm.model", modelEl.value.trim());
+    deepAnalyze(text, genre).then(function (r) {
+      render(r);
+      setStatus("Готово: " + r.stats.findings + " знахідок.");
+    }).catch(function (err) {
+      setStatus(err.message || "Не вдалося виконати аналіз.", true);
+    }).then(function () { run.disabled = false; });
+  }
+
+  function setMode(m) {
+    mode = m;
+    modeFast.setAttribute("aria-pressed", String(m === "fast"));
+    modeDeep.setAttribute("aria-pressed", String(m === "deep"));
+    deepBox.hidden = m !== "deep";
+    store("apm.mode", m);
+  }
+
+  run.addEventListener("click", analyze);
+  modeFast.addEventListener("click", function () { setMode("fast"); });
+  modeDeep.addEventListener("click", function () { setMode("deep"); });
+  $("sample").addEventListener("click", function () { src.value = window.SAMPLE_TEXT; genreSel.value = "science"; analyze(); });
+  $("clear").addEventListener("click", function () { src.value = ""; store("apm.draft", null); out.hidden = true; res = null; unpin(); setStatus(""); src.focus(); });
+  src.addEventListener("keydown", function (e) { if ((e.ctrlKey || e.metaKey) && e.key === "Enter") { e.preventDefault(); analyze(); } });
+  src.addEventListener("input", function () { store("apm.draft", src.value.length < 50000 ? src.value : null); });
+
+  /* ---------- start ---------- */
+  var savedGenre = load("apm.genre");
+  if (savedGenre && E.GENRES[savedGenre]) genreSel.value = savedGenre;
+  var savedKey = load("apm.key");
+  if (savedKey) { keyEl.value = savedKey; rememberEl.checked = true; }
+  var savedModel = load("apm.model");
+  if (savedModel) modelEl.value = savedModel;
+  if (load("apm.mode") === "deep") setMode("deep");
+
+  var draft = load("apm.draft");
+  var useDraft = !!(draft && draft.trim());
+  src.value = useDraft ? draft : window.SAMPLE_TEXT;
+  if (!useDraft) genreSel.value = "science";
+  var first = E.analyze(src.value, { genre: genreSel.value });
+  first.mode = "fast";
+  render(first);
+})();
 </script>
+</body>
+</html>
