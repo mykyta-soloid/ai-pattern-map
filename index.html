@@ -1,0 +1,424 @@
+<title>Карта ШІ-патернів</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Literata:opsz,wght@7..72,400;7..72,600&display=swap">
+<style>
+/* Layout: reading column on the left, sticky findings panel on the right; panel stacks under the text on phones. */
+:root {
+  --bg: #f4f5f8;
+  --surface: #ffffff;
+  --fg: #1a1d24;
+  --muted: #596070;
+  --line: #d9dce5;
+  --accent: #3946c8;
+  --strong: #c2352b;
+  --medium: #b36d00;
+  --weak: #5b6b94;
+  --human: #17806a;
+  --font-text: "Literata", Georgia, "Times New Roman", serif;
+  --font-ui: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #121419;
+    --surface: #1b1e26;
+    --fg: #e8eaef;
+    --muted: #9aa2b1;
+    --line: #2b303b;
+    --accent: #909dff;
+    --strong: #ff7d72;
+    --medium: #f0b04a;
+    --weak: #9aabd2;
+    --human: #4cc5a3;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #121419;
+  --surface: #1b1e26;
+  --fg: #e8eaef;
+  --muted: #9aa2b1;
+  --line: #2b303b;
+  --accent: #909dff;
+  --strong: #ff7d72;
+  --medium: #f0b04a;
+  --weak: #9aabd2;
+  --human: #4cc5a3;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-ui);
+  font-size: 15px;
+  line-height: 1.5;
+  padding-block: 28px 48px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.wrap { max-width: 1120px; margin: 0 auto; }
+header { margin-bottom: 20px; }
+h1 { font-size: 24px; line-height: 1.2; margin: 0 0 6px; font-weight: 600; letter-spacing: -0.01em; text-wrap: balance; }
+.sub { margin: 0; color: var(--muted); max-width: 62ch; }
+.layout { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 28px; align-items: start; }
+.paper {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 32px clamp(18px, 4vw, 44px);
+}
+.paper p {
+  font-family: var(--font-text);
+  font-size: 19px;
+  line-height: 1.85;
+  margin: 0 0 1.2em;
+  hyphens: auto;
+}
+.paper p:last-child { margin-bottom: 0; }
+mark {
+  --c: var(--weak);
+  color: inherit;
+  background: color-mix(in srgb, var(--c) 12%, transparent);
+  border-bottom: 2px dotted var(--c);
+  border-radius: 2px;
+  padding: 1px 1px 0;
+  cursor: help;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  transition: background-color .15s;
+}
+mark[data-sev="strong"] { --c: var(--strong); background: color-mix(in srgb, var(--c) 22%, transparent); border-bottom: 3px solid var(--c); }
+mark[data-sev="medium"] { --c: var(--medium); background: color-mix(in srgb, var(--c) 18%, transparent); border-bottom: 2px solid var(--c); }
+mark[data-sev="weak"] { --c: var(--weak); }
+mark[data-sev="human"] { --c: var(--human); background: color-mix(in srgb, var(--c) 12%, transparent); border-bottom: 2px dashed var(--c); }
+mark:hover, mark.active, mark:focus-visible { background: color-mix(in srgb, var(--c) 34%, transparent); outline: none; }
+mark:focus-visible { box-shadow: 0 0 0 2px var(--accent); }
+mark.off { background: none; border-bottom-color: transparent; cursor: text; pointer-events: none; }
+
+aside { position: sticky; top: 16px; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.box { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
+.box h2 { margin: 0 0 10px; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  display: inline-flex; align-items: center; gap: 8px;
+  font: inherit; font-size: 13px; color: var(--fg);
+  background: var(--surface); border: 1px solid var(--line); border-radius: 999px;
+  padding: 6px 12px; cursor: pointer;
+}
+.chip[aria-pressed="false"] { opacity: .5; }
+.chip:hover { border-color: var(--accent); }
+.chip:focus-visible, .item:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.dot { width: 10px; height: 10px; border-radius: 50%; background: var(--c); flex: none; }
+.dot[data-sev="strong"] { --c: var(--strong); }
+.dot[data-sev="medium"] { --c: var(--medium); }
+.dot[data-sev="weak"] { --c: var(--weak); }
+.dot[data-sev="human"] { --c: var(--human); }
+.chip b { font-variant-numeric: tabular-nums; font-weight: 600; }
+.note { margin: 0; font-size: 13.5px; color: var(--muted); }
+.note + .note { margin-top: 8px; }
+.note strong { color: var(--fg); font-weight: 600; }
+.list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; max-height: 46vh; overflow-y: auto; }
+.item {
+  display: grid; grid-template-columns: 10px minmax(0, 1fr); gap: 10px; align-items: start;
+  width: 100%; text-align: left; font: inherit; color: inherit; background: none; border: 0;
+  border-top: 1px solid var(--line); padding: 9px 4px; cursor: pointer; border-radius: 4px;
+}
+.list li:first-child .item { border-top: 0; }
+.item:hover, .item.hot { background: color-mix(in srgb, var(--accent) 8%, transparent); }
+.item .dot { margin-top: 6px; }
+.item .cat { display: block; font-size: 13px; font-weight: 600; }
+.item .q { display: block; font-size: 12.5px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.item[hidden] { display: none; }
+
+.tip {
+  position: fixed; z-index: 50; left: 0; top: 0; width: min(360px, calc(100vw - 16px));
+  background: var(--surface); color: var(--fg);
+  border: 1px solid var(--line); border-left: 4px solid var(--c, var(--accent));
+  border-radius: 8px; padding: 12px 14px 13px;
+  box-shadow: 0 8px 28px rgba(0,0,0,.18);
+  font-family: var(--font-ui); font-size: 13.5px; line-height: 1.5;
+  opacity: 0; visibility: hidden; transition: opacity .12s; pointer-events: none;
+}
+.tip.show { opacity: 1; visibility: visible; }
+.tip.pinned { pointer-events: auto; }
+.tip .head { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
+.tip .cat { font-weight: 600; font-size: 14px; }
+.tip .badge { font-size: 11px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--c); border: 1px solid var(--c); border-radius: 999px; padding: 1px 8px; }
+.tip dl { margin: 0; display: grid; gap: 8px; }
+.tip dt { font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.tip dd { margin: 1px 0 0; }
+.tip .genre { color: var(--muted); }
+@media (max-width: 860px) {
+  .layout { grid-template-columns: minmax(0, 1fr); }
+  aside { position: static; }
+  .list { max-height: none; }
+  .tip { left: max(8px, env(safe-area-inset-left, 0px)) !important; top: auto !important; bottom: max(8px, env(safe-area-inset-bottom, 0px)); width: auto; right: max(8px, env(safe-area-inset-right, 0px)); pointer-events: auto; }
+  .paper p { font-size: 17.5px; }
+}
+@media (prefers-reduced-motion: reduce) { mark, .tip { transition: none; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>Карта ШІ-патернів</h1>
+    <p class="sub">Філософський текст про мову, перевірений скілом no-ai-slop. Наведіть курсор на підсвічене місце, щоб побачити, що з ним не так. На телефоні торкніться фрагмента.</p>
+  </header>
+
+  <div class="layout">
+    <article class="paper" id="paper">
+      <p><mark data-id="f1">Мова як предмет вивчення постає перед тими, хто її опановує, у вкрай різному світлі залежно від обставин та інституційних форм навчання</mark>. У шкільних курсах української мови <mark data-id="f2">традиційно (хоча й із помітним поступом внаслідок освітніх реформ)</mark> переважає мовознавчий підхід. Учні старшої школи <mark data-id="f3">визначають частини мови, аналізують синтаксичні конструкції, розрізняють типи речень і встановлюють зв'язки між їхніми складниками</mark>. Такий підхід формує уявлення про мову як <mark data-id="f4">певну</mark> впорядковану та стабільну систему, елементи якої <mark data-id="f5">підпорядковуються визначеним правилам правопису та підручника</mark>. Натомість діти дошкільного віку засвоюють батьківську мову <mark data-id="f6">переважно природним шляхом, через безпосередню взаємодію з мовним середовищем</mark>. <mark data-id="h1">В перші роки</mark> це наслідування звуків та інтонацій дорослих, лепет і поступове формування перших слів. Згодом дитина відкриває для себе <mark data-id="f7">не лише здатність мови називати предмети та явища, а й можливість</mark> <mark data-id="f8">“змінювати реальність”</mark> за допомогою слів. <mark data-id="h2">Певні вислови, наприклад, можуть спонукати батьків усміхнутися або навіть принести бажане печиво.</mark></p>
+
+      <p><mark data-id="f9">Вступне ілюстративне порівняння демонструє, що</mark> <mark data-id="f10">уже на рівні первинного засвоєння мови</mark> можна простежити два її виміри: структурний, пов'язаний із засвоєнням системи знаків і правил, та практичний, <mark data-id="f11">що виявляється у використанні</mark> мовлення як засобу взаємодії з навколишнім світом та його <mark data-id="h3">субʼєктами</mark>. <mark data-id="f12">Подібне розрізнення властиве й історії аналітичної філософії ХХ століття</mark>, де <mark data-id="f13">воно випливає в проблему вибору</mark> між двома методологічними орієнтаціями: аналізом ідеальної мови та дослідженням повсякденного мовлення.</p>
+    </article>
+
+    <aside>
+      <section class="box" aria-label="Фільтри">
+        <h2>Показати</h2>
+        <div class="chips" id="chips"></div>
+      </section>
+
+      <section class="box" aria-label="Загальне спостереження">
+        <h2>Загальне спостереження</h2>
+        <p class="note"><strong>У двох абзацах немає жодного імені чи посилання.</strong> Для наукового філософського тексту це головний сигнал, тому «Без джерела» тут рахується найсерйозніше.</p>
+        <p class="note">Іменникову мову й термінологію вважаємо нормою жанру: такі місця позначені слабко. Патерни є ознаками, а не доказом, що текст писав ШІ.</p>
+      </section>
+
+      <section class="box" aria-label="Усі знахідки">
+        <h2>Усі знахідки</h2>
+        <ul class="list" id="list"></ul>
+      </section>
+    </aside>
+  </div>
+</div>
+
+<div class="tip" id="tip" role="tooltip" aria-live="polite"></div>
+
+<script>
+var SEV = {
+  strong: "Сильний",
+  medium: "Середній",
+  weak: "Слабкий",
+  human: "Живий сигнал"
+};
+var SEV_PLURAL = {
+  strong: "Сильні",
+  medium: "Середні",
+  weak: "Слабкі",
+  human: "Живі сигнали"
+};
+
+var F = {
+  f1: { cat: "Загальник", sev: "medium",
+    what: "Зачин про те, що мова «постає в різному світлі», підійшов би до будь-якої роботи про мову. Тест на переносимість не проходить. «Вкрай» і «інституційних форм» додають ваги, а не змісту.",
+    fix: "Почати з тези цієї роботи або з конкретного розрізнення, яке далі розгортається.",
+    genre: "Філософські вступи часто починають широко, але теза має з'явитися в перших реченнях." },
+  f2: { cat: "Без джерела", sev: "strong",
+    what: "Твердження про стан шкільного курсу й «помітний поступ» не мають ні програми, ні дослідження, ні автора. Дужка звучить як застереження, а не як факт.",
+    fix: "Назвати реформу, документ чи дослідження або прибрати застереження.",
+    genre: "У науковому тексті таке твердження потребує посилання." },
+  f3: { cat: "Однотипний ритм", sev: "weak",
+    what: "Чотири дієслова поспіль в одній формі. Сам перелік конкретний, і це добре, але ритм механічний.",
+    fix: "Залишити один-два найважливіші приклади або розбити перелік.",
+    genre: "Перелік змісту курсу доречний. Проблема лише в одноманітності." },
+  f4: { cat: "Розмите слово", sev: "weak",
+    what: "«Певну» нічого не уточнює: яку саме систему мають на увазі?",
+    fix: "Прибрати слово або назвати, яка це система.",
+    genre: "У філософії «певний» часто є обережним словом, але тут воно зайве." },
+  f5: { cat: "Розмите слово", sev: "weak",
+    what: "«Визначеним» порожнє, а «правилам підручника» розмите: які правила і чиї?",
+    fix: "Назвати джерело норм (правопис, програма) або скоротити до «правилам правопису».",
+    genre: "Нормативний характер школи можна підкріпити конкретним документом." },
+  f6: { cat: "Без джерела", sev: "medium",
+    what: "Загальне твердження про засвоєння мови без автора й теорії. Складається з абстрактних іменників: «взаємодія», «середовище».",
+    fix: "Послатися на концепцію засвоєння мови або сформулювати конкретніше.",
+    genre: "Тут потрібне посилання: у лінгвістиці та психології є різні моделі." },
+  f7: { cat: "Протиставлення «не лише…, а й»", sev: "medium",
+    what: "Конструкція розкладає думку на дві частини, хоча головне тут друга: мова змінює реальність. Перша частина далі не розгортається.",
+    fix: "Сказати головне одразу, а називання предметів згадати окремо або прибрати.",
+    genre: "У філософії така побудова поширена, але тут вона зайва." },
+  f8: { cat: "Без джерела", sev: "weak",
+    what: "Фраза в лапках нагадує тезу про те, що слова діють, але автора не названо.",
+    fix: "Якщо це відсилка до теорії мовленнєвих актів (Остін), назвати джерело. Якщо ні, прибрати лапки.",
+    genre: "Для філософського тексту відсилка без імені вразлива." },
+  f9: { cat: "Метакоментар", sev: "medium",
+    what: "Текст коментує сам себе замість того, щоб сказати висновок. «Вступне ілюстративне порівняння» називає дію автора, а не думку.",
+    fix: "Прибрати й одразу назвати два виміри.",
+    genre: "Підсумок наприкінці вступу в науковому тексті нормальний. Метакоментар можна скоротити." },
+  f10: { cat: "Розмите слово", sev: "weak",
+    what: "«На рівні» тут порожня конструкція: «у первинному засвоєнні» каже те саме.",
+    fix: "«У первинному засвоєнні мови».",
+    genre: "У науковому стилі «на рівні» трапляється часто, але тут нічого не додає." },
+  f11: { cat: "Слабке дієслово", sev: "weak",
+    what: "Практичний вимір не «виявляється», а полягає у використанні мовлення. Дієслово звучить вагомо, але нічого не рухає.",
+    fix: "«Що полягає у…» або «тобто у використанні…».",
+    genre: "Звичний науковий зворот. Міняти варто, якщо він повторюється." },
+  f12: { cat: "Без джерела", sev: "strong",
+    what: "Велике історичне твердження без імен, праць і дат. Видно лише, що мова про два напрями, але жоден представник не названий.",
+    fix: "Назвати авторів двох орієнтацій і дати хоча б одне посилання на кожну.",
+    genre: "Для філософського тексту це найслабше місце: без імен твердження неможливо перевірити." },
+  f13: { cat: "Слабке дієслово", sev: "medium",
+    what: "«Випливає в проблему» нестандартна сполука: випливати можна з чогось, а не «в» щось. Образ нечіткий.",
+    fix: "«Перетворюється на проблему вибору» або «постає як вибір».",
+    genre: "Перевірте, чи це не калька, і прочитайте вголос." },
+  h1: { cat: "Дрібна непослідовність", sev: "human",
+    what: "Перед приголосним зазвичай пишуть «У перші роки». Це дрібний збій, більш типовий для людського письма. Доказом не є.",
+    fix: "Виправити на «У перші роки».",
+    genre: "Милозвучність: у/в залежить від сусідніх звуків." },
+  h2: { cat: "Конкретний приклад", sev: "human",
+    what: "Образ із печивом живий і трохи жартівливий. Шаблонні тексти частіше обирають узагальнення. Доказом не є.",
+    fix: "Нічого не робити: це місце з голосом автора.",
+    genre: "У філософському тексті такий приклад допомагає читачу." },
+  h3: { cat: "Різні апострофи", sev: "human",
+    what: "Тут апостроф ʼ, а в «зв'язки» й «пов'язаний» звичайний '. Так буває, коли текст зібрано з різних джерел або набрано вручну. Доказом не є.",
+    fix: "Уніфікувати апострофи.",
+    genre: "Редакторська дрібниця, яка не залежить від жанру." }
+};
+
+var marks = Array.prototype.slice.call(document.querySelectorAll("mark[data-id]"));
+var tip = document.getElementById("tip");
+var list = document.getElementById("list");
+var chips = document.getElementById("chips");
+var pinned = null;
+var narrow = window.matchMedia("(max-width: 860px)");
+
+marks.forEach(function (m, i) {
+  var f = F[m.getAttribute("data-id")];
+  m.setAttribute("data-sev", f.sev);
+  m.setAttribute("tabindex", "0");
+  m.setAttribute("aria-label", f.cat + ": " + f.what);
+});
+
+function el(tag, cls, text) {
+  var n = document.createElement(tag);
+  if (cls) n.className = cls;
+  if (text) n.textContent = text;
+  return n;
+}
+
+function fillTip(id) {
+  var f = F[id];
+  tip.textContent = "";
+  tip.style.setProperty("--c", "var(--" + f.sev + ")");
+  var head = el("div", "head");
+  head.appendChild(el("span", "cat", f.cat));
+  head.appendChild(el("span", "badge", SEV[f.sev]));
+  tip.appendChild(head);
+  var dl = el("dl");
+  [["Що не так", f.what, ""], ["Як виправити", f.fix, ""], ["Для філософського тексту", f.genre, "genre"]].forEach(function (r) {
+    var wrap = el("div");
+    wrap.appendChild(el("dt", "", r[0]));
+    wrap.appendChild(el("dd", r[2], r[1]));
+    dl.appendChild(wrap);
+  });
+  tip.appendChild(dl);
+}
+
+function place(x, y) {
+  if (narrow.matches) return;
+  var w = tip.offsetWidth, h = tip.offsetHeight;
+  var left = Math.min(Math.max(8, x + 14), window.innerWidth - w - 8);
+  var top = y + 20;
+  if (top + h > window.innerHeight - 8) top = Math.max(8, y - h - 14);
+  tip.style.left = left + "px";
+  tip.style.top = top + "px";
+}
+
+function placeAtEl(m) {
+  var r = m.getBoundingClientRect();
+  place(r.left, r.bottom - 14);
+}
+
+function show(id, x, y, m) {
+  fillTip(id);
+  tip.classList.add("show");
+  if (m && x == null) placeAtEl(m); else place(x, y);
+  marks.forEach(function (n) { n.classList.toggle("active", n.getAttribute("data-id") === id); });
+  Array.prototype.forEach.call(list.querySelectorAll(".item"), function (it) {
+    it.classList.toggle("hot", it.getAttribute("data-id") === id);
+  });
+}
+
+function hide() {
+  tip.classList.remove("show", "pinned");
+  marks.forEach(function (n) { n.classList.remove("active"); });
+  Array.prototype.forEach.call(list.querySelectorAll(".item"), function (it) { it.classList.remove("hot"); });
+}
+
+function unpin() { pinned = null; hide(); }
+
+marks.forEach(function (m) {
+  var id = m.getAttribute("data-id");
+  m.addEventListener("mouseenter", function (e) { if (!pinned) show(id, e.clientX, e.clientY, m); });
+  m.addEventListener("mousemove", function (e) { if (!pinned) place(e.clientX, e.clientY); });
+  m.addEventListener("mouseleave", function () { if (!pinned) hide(); });
+  m.addEventListener("focus", function () { if (!pinned) show(id, null, null, m); });
+  m.addEventListener("blur", function () { if (!pinned) hide(); });
+  m.addEventListener("click", function (e) {
+    e.stopPropagation();
+    if (pinned === id) { unpin(); return; }
+    pinned = id;
+    show(id, e.clientX, e.clientY, m);
+    tip.classList.add("pinned");
+  });
+  m.addEventListener("keydown", function (e) {
+    if (e.key === "Enter" || e.key === " ") { e.preventDefault(); m.click(); }
+  });
+});
+
+document.addEventListener("click", function (e) { if (pinned && !tip.contains(e.target)) unpin(); });
+document.addEventListener("keydown", function (e) { if (e.key === "Escape") unpin(); });
+window.addEventListener("scroll", function () {
+  if (pinned) {
+    var m = document.querySelector('mark[data-id="' + pinned + '"]');
+    if (m) placeAtEl(m);
+  }
+}, { passive: true });
+
+/* list of findings, in reading order */
+marks.forEach(function (m) {
+  var id = m.getAttribute("data-id");
+  var f = F[id];
+  var li = el("li");
+  var b = el("button", "item");
+  b.type = "button";
+  b.setAttribute("data-id", id);
+  b.setAttribute("data-sev", f.sev);
+  var d = el("span", "dot"); d.setAttribute("data-sev", f.sev);
+  var box = el("span");
+  box.appendChild(el("span", "cat", f.cat));
+  var t = m.textContent;
+  box.appendChild(el("span", "q", "«" + (t.length > 56 ? t.slice(0, 56) + "…" : t) + "»"));
+  b.appendChild(d); b.appendChild(box);
+  b.addEventListener("click", function (e) {
+    e.stopPropagation();
+    m.scrollIntoView({ block: "center", behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+    pinned = id;
+    setTimeout(function () { show(id, null, null, m); tip.classList.add("pinned"); }, 320);
+  });
+  b.addEventListener("mouseenter", function () { if (!pinned) m.classList.add("active"); });
+  b.addEventListener("mouseleave", function () { if (!pinned) m.classList.remove("active"); });
+  li.appendChild(b);
+  list.appendChild(li);
+});
+
+/* severity filters with live counts */
+var on = { strong: true, medium: true, weak: true, human: true };
+["strong", "medium", "weak", "human"].forEach(function (s) {
+  var n = marks.filter(function (m) { return F[m.getAttribute("data-id")].sev === s; }).length;
+  var c = el("button", "chip");
+  c.type = "button";
+  c.setAttribute("aria-pressed", "true");
+  var d = el("span", "dot"); d.setAttribute("data-sev", s);
+  c.appendChild(d);
+  c.appendChild(el("span", "", SEV_PLURAL[s]));
+  c.appendChild(el("b", "", String(n)));
+  c.addEventListener("click", function () {
+    on[s] = !on[s];
+    c.setAttribute("aria-pressed", String(on[s]));
+    unpin();
+    marks.forEach(function (m) { if (F[m.getAttribute("data-id")].sev === s) m.classList.toggle("off", !on[s]); });
+    Array.prototype.forEach.call(list.querySelectorAll(".item"), function (it) { if (it.getAttribute("data-sev") === s) it.hidden = !on[s]; });
+  });
+  chips.appendChild(c);
+});
+</script>
